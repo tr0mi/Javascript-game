@@ -1,6 +1,6 @@
 # Javascript-game
-small javascript game to test some features
+A very simple game to practice some javascript
 
 Game can be found at: https://tr0mi.github.io/Javascript-game/
 
-Refresh page to restart
+Spam refresh page to restart
