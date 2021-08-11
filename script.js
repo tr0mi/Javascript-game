@@ -5,6 +5,9 @@ var puckTop = 0;
 var level = 1;
 var touches = 0;
 var devToggle = false;
+var upToggle = false;
+var downToggle = false;
+
 
 
 
@@ -12,17 +15,36 @@ bat.innerHTML = ("|");
 puck.innerHTML = (".");
 
 
+function batUp() {
+    batPos = batPos + 2;
+    bat.style.top = 320 + batPos + "px";
+}
+function batDown() {
+    batPos = batPos - 2;
+    bat.style.top = 320 + batPos + "px";
+}
 
-//////////////////////////////////////// Up Arrow ///////////////////////////////////////////////
+
+//////////////////////////////////////// Release Key ///////////////////////////////////////////////
+document.addEventListener('keyup', function(event) {
+    if(event.key == "ArrowUp") {	 
+        upToggle = false;		
+    }
+    else if(event.key == "ArrowDown") {   
+        downToggle = false;
+    }
+})
+//////////////////////////////////////// Press Key ///////////////////////////////////////////////
 document.addEventListener('keydown', function(event) {
     if(event.key == "ArrowUp" && batPos > -340) {	 
-        batPos = batPos - 10;
-        bat.style.top = 320 + batPos + "px";		
+        // batPos = batPos - 10;
+        // bat.style.top = 320 + batPos + "px";
+        upToggle = true;		
     }
-//////////////////////////////////////// Down Arrow ///////////////////////////////////////////////
     else if(event.key == "ArrowDown" && batPos < 360) {   
-        batPos = batPos + 10;
-        bat.style.top = 320 + batPos + "px";
+        // batPos = batPos + 10;
+        // bat.style.top = 320 + batPos + "px";
+        downToggle = true;
     }
 // dev info
     else if(event.key == "d" && devToggle == false) {
@@ -32,6 +54,8 @@ document.addEventListener('keydown', function(event) {
         safeInfo.style.opacity = "1";
         puckTopInfo.style.opacity = "1";
         speedInfo.style.opacity = "1";
+        upInfo.style.opacity = "1";
+        downInfo.style.opacity = "1";
         devToggle = true;
     }
     else if(event.key == "d" && devToggle == true) {
@@ -41,6 +65,8 @@ document.addEventListener('keydown', function(event) {
         safeInfo.style.opacity = "0";
         puckTopInfo.style.opacity = "0";
         speedInfo.style.opacity = "0";
+        upInfo.style.opacity = "0";
+        downInfo.style.opacity = "0";
         devToggle = false;
     }
 })
@@ -91,6 +117,21 @@ function myLoop() {         //  create a loop function
         touchInfo.innerHTML = ("Touches: " + touches);
         levelInfo.innerHTML = ("Level: " + level);
         speedInfo.innerHTML = ("Speed: " + speed);
+        upInfo.innerHTML = ("upToggle: " + upToggle);
+        downInfo.innerHTML = ("downToggle: " + downToggle);
+        var puckOnBat = puckInt - batPos;
+
+
+        if (upToggle == true && batPos > -340) {
+            batDown();
+        } else {
+            //clearInterval(upInt);
+        }
+        if (downToggle == true && batPos < 360) {
+            batUp();
+        } else {
+            //clearInterval();
+        }
 
         // if travelling right
         switch(i > x && i < 1380) {  
@@ -102,18 +143,18 @@ function myLoop() {         //  create a loop function
         // if travelling left or at right-hand border
             case false: if (safe == true && i <= 0) { // if collide with bat
                             x = i; i = i + speed; puckTop = puckTop + upAmount; myLoop(); puckInfo.innerHTML = (i + " puckLeft"); puckTopInfo.innerHTML = (puckInt + " puckTop");
-                            switch(puckInt - batPos) { // set new vertical translation
-                                case -50: upAmount = -1; touches++; break;
-                                case -40: upAmount = -0.8; touches++; break;
-                                case -30: upAmount = -0.6; touches++; break;
-                                case -20: upAmount = -0.4; touches++; break;
-                                case -10: upAmount = -0.2; touches++; break;
-                                case 0: upAmount = 0.1; touches++; break;
-                                case 10: upAmount = 0.2; touches++; break;
-                                case 20: upAmount = 0.4; touches++; break;
-                                case 30: upAmount = 0.6; touches++; break;
-                                case 40: upAmount = 0.8; touches++; break;
-                                case 50: upAmount = 1; touches++; break;
+                            switch(true) { // set new vertical translation
+                                case puckOnBat >= -50 && puckOnBat <= -40: upAmount = -1; touches++; break;
+                                case puckOnBat > -40 && puckOnBat <= -30: upAmount = -0.8; touches++; break;
+                                case puckOnBat > -30 && puckOnBat <= -20: upAmount = -0.6; touches++; break;
+                                case puckOnBat > -20 && puckOnBat <= -10: upAmount = -0.4; touches++; break;
+                                case puckOnBat > -10 && puckOnBat < 0: upAmount = -0.2; touches++; break;
+                                case puckOnBat == 0: upAmount = 0.1; touches++; break;
+                                case puckOnBat > 0 && puckOnBat <= 10: upAmount = 0.2; touches++; break;
+                                case puckOnBat > 10 && puckOnBat <= 20: upAmount = 0.4; touches++; break;
+                                case puckOnBat > 20 && puckOnBat <= 30: upAmount = 0.6; touches++; break;
+                                case puckOnBat > 30 && puckOnBat <= 40: upAmount = 0.8; touches++; break;
+                                case puckOnBat > 40 && puckOnBat <= 50: upAmount = 1; touches++; break;
                             } 
                         }
                         else if(puckInt > 400 || puckInt < -380) { // if collide with top/bottom border
