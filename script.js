@@ -88,7 +88,7 @@ function myLoop() {         //  create a loop function
 
         puck.style.left = i + "px";
         puck.style.top = puckTop + 300 + "px";
-        puckInt = Math.round(puckTop / 10) * 10;
+        puckInt = Math.round(puckTop / 2) * 2;
 
         if (touches == 10) {
             level++;
